@@ -10,6 +10,6 @@ public interface APiInterface {
 
     @GET("/data/2.5/forecast")
     Call<ModelClass> getCurrentWeatherData(@Query("lat") String lat,@Query("lon")
-            String lon,@Query("cnt") String cnt,@Query("appid") String app_id);
+            String lon,@Query("cnt") int cnt,@Query("appid") String app_id);
 
 }

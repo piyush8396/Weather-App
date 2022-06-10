@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -42,6 +44,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -52,6 +55,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
     String APPId = "1aa1c77170fcdb824e74e94c02bd799b";
+    int c=40;
 
     //  static FusedLocationProviderClient fusedLocationProvideClient;
     TextView temp;
@@ -66,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     TextView temp4;
     TextView day5;
     TextView temp5;
+ final ArrayList<myList>lists = new ArrayList<myList>();
 
     protected LocationManager locationManager;
     protected LocationListener locationListener;
@@ -76,16 +81,17 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         setContentView(R.layout.activity_main);
          temp=(TextView) findViewById(R.id.temp) ;
          city=(TextView) findViewById(R.id.city_name);
-        day1 = (TextView) findViewById(R.id.day1);
-        temp1 = (TextView) findViewById(R.id.temp1);
-        day2 = (TextView) findViewById(R.id.day2);
-        temp2 = (TextView) findViewById(R.id.temp2);
-        day3 = (TextView) findViewById(R.id.day3);
-        temp3 = (TextView) findViewById(R.id.temp3);
-        day4 = (TextView) findViewById(R.id.day4);
-        temp4 = (TextView) findViewById(R.id.temp4);
-        day5 = (TextView) findViewById(R.id.day5);
-        temp5 = (TextView) findViewById(R.id.temp5);
+//        day1 = (TextView) findViewById(R.id.day1);
+//        temp1 = (TextView) findViewById(R.id.temp1);
+//        day2 = (TextView) findViewById(R.id.day2);
+//        temp2 = (TextView) findViewById(R.id.temp2);
+//        day3 = (TextView) findViewById(R.id.day3);
+//        temp3 = (TextView) findViewById(R.id.temp3);
+//        day4 = (TextView) findViewById(R.id.day4);
+//        temp4 = (TextView) findViewById(R.id.temp4);
+//        day5 = (TextView) findViewById(R.id.day5);
+//        temp5 = (TextView) findViewById(R.id.temp5);
+
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED &&
@@ -98,19 +104,22 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         }
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 1, this);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 1, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 1, this);
         Location location=locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if(location!=null) {
             Log.d("lat1", Double.toString(location.getLatitude()));
             Log.d("lat2", Double.toString(location.getLongitude()));
             APiInterface aPiInterface = RetroFitClient.getRetrofit().create(APiInterface.class);
             Call<ModelClass> call = aPiInterface.getCurrentWeatherData(Double.toString(location.getLatitude()),
-                    Double.toString(location.getLongitude()), "40", APPId);
+                    Double.toString(location.getLongitude()),c, APPId);
+            Log.d("ram1",String.valueOf(call));
+
             call.enqueue(new Callback<ModelClass>() {
                 @SuppressLint("SetTextI18n")
                 @Override
-                public void onResponse(Call<ModelClass> call, Response<ModelClass> response) {
+                public void onResponse( Call<ModelClass> call,  Response<ModelClass> response) {
+                    Log.d("ram","aa");
                     if (response.code() == 200) {
 
 
@@ -122,12 +131,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                             if (i == 0) {
                                 Log.d("test",Double.toString(modelClass.list.get(i).main.temp));
                             temp.setText(Double.toString((int)modelClass.list.get(i).main.temp-273)+" \u2103");
-                            temp1.setText(Double.toString((int)modelClass.list.get(i).main.temp-273)+" \u2103");
+                          //  temp1.setText(Double.toString((int)modelClass.list.get(i).main.temp-273)+" \u2103");
                                city.setText(modelClass.city.name);
                                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                 try {
                                     Date date = format.parse(modelClass.list.get(i).dt_txt);
-                                    day1.setText((String) DateFormat.format("EEEE", date));
+                                    lists.add(new myList((String) DateFormat.format("EEEE", date), Double.toString((int)modelClass.list.get(i).main.temp-273)+" \u2103"));
+                                   // day1.setText((String) DateFormat.format("EEEE", date));
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
@@ -135,41 +145,45 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
                             }
                             if (i == 8) {
-                                temp2.setText(Double.toString((int)modelClass.list.get(i).main.temp-273)+" \u2103");
+                               //temp2.setText(Double.toString((int)modelClass.list.get(i).main.temp-273)+" \u2103");
                                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                 try {
                                     Date date = format.parse(modelClass.list.get(i).dt_txt);
-                                    day2.setText((String) DateFormat.format("EEEE", date));
+                                    lists.add(new myList((String) DateFormat.format("EEEE", date),Double.toString((int)modelClass.list.get(i).main.temp-273)+" \u2103"));
+                                    //day2.setText((String) DateFormat.format("EEEE", date));
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
                             }
                             if (i == 16) {
-                                temp3.setText(Double.toString((int)modelClass.list.get(i).main.temp-273)+" \u2103");
+                              // temp3.setText(Double.toString((int)modelClass.list.get(i).main.temp-273)+" \u2103");
                                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                 try {
                                     Date date = format.parse(modelClass.list.get(i).dt_txt);
-                                    day3.setText((String) DateFormat.format("EEEE", date));
+                                  // day3.setText((String) DateFormat.format("EEEE", date));
+                                   lists.add(new myList((String) DateFormat.format("EEEE", date),Double.toString((int)modelClass.list.get(i).main.temp-273)+" \u2103"));
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
                             }
                             if (i == 24) {
-                                temp4.setText(Double.toString((int)modelClass.list.get(i).main.temp-273)+" \u2103");
+                               //temp4.setText(Double.toString((int)modelClass.list.get(i).main.temp-273)+" \u2103");
                                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                 try {
                                     Date date = format.parse(modelClass.list.get(i).dt_txt);
-                                    day4.setText((String) DateFormat.format("EEEE", date));
+                                    //day4.setText((String) DateFormat.format("EEEE", date));
+                                    lists.add(new myList((String) DateFormat.format("EEEE", date),Double.toString((int)modelClass.list.get(i).main.temp-273)+" \u2103"));
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
                             }
-                            if (i == 32) {
-                                temp5.setText(Double.toString((int)modelClass.list.get(i).main.temp-273)+" \u2103");
+                            if (i == 28) {
+                               // temp5.setText(Double.toString((int)modelClass.list.get(i).main.temp-273)+" \u2103");
                                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                 try {
                                     Date date = format.parse(modelClass.list.get(i).dt_txt);
-                                    day5.setText((String) DateFormat.format("EEEE", date));
+                                   // day5.setText((String) DateFormat.format("EEEE", date));
+                                    lists.add(new myList((String) DateFormat.format("EEEE", date),Double.toString((int)modelClass.list.get(i).main.temp-273)+" \u2103"));
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
@@ -186,6 +200,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 }
             });
         }
+        Log.d("s",lists.size()+"");
+        RecyclerView recyclerView=(RecyclerView) findViewById(R.id.recyclerView);
+        MyListAdapter adapter=new MyListAdapter(lists);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
