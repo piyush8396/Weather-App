@@ -106,14 +106,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             Log.d("lat2", Double.toString(location.getLongitude()));
             APiInterface aPiInterface = RetroFitClient.getRetrofit().create(APiInterface.class);
             Call<ModelClass> call = aPiInterface.getCurrentWeatherData(Double.toString(location.getLatitude()),
-                    Double.toString(location.getLongitude()), "20", APPId);
+                    Double.toString(location.getLongitude()), "40", APPId);
             call.enqueue(new Callback<ModelClass>() {
                 @SuppressLint("SetTextI18n")
                 @Override
                 public void onResponse(Call<ModelClass> call, Response<ModelClass> response) {
-                    Log.d("ram1","aa gya");
                     if (response.code() == 200) {
-                        Log.d("ram","aa gya");
+
 
                         ModelClass modelClass = response.body();
                        // assert modelClass != null;
@@ -122,8 +121,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                         for (int i = 0; i < modelClass.list.size(); i++) {
                             if (i == 0) {
                                 Log.d("test",Double.toString(modelClass.list.get(i).main.temp));
-                            temp.setText(Double.toString(modelClass.list.get(i).main.temp));
-                            temp1.setText(Double.toString(modelClass.list.get(i).main.temp));
+                            temp.setText(Double.toString((int)modelClass.list.get(i).main.temp-273)+" \u2103");
+                            temp1.setText(Double.toString((int)modelClass.list.get(i).main.temp-273)+" \u2103");
                                city.setText(modelClass.city.name);
                                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                 try {
@@ -135,8 +134,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
 
                             }
-                            if (i == 4) {
-                                temp2.setText(Double.toString(modelClass.list.get(i).main.temp));
+                            if (i == 8) {
+                                temp2.setText(Double.toString((int)modelClass.list.get(i).main.temp-273)+" \u2103");
                                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                 try {
                                     Date date = format.parse(modelClass.list.get(i).dt_txt);
@@ -145,8 +144,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                                     e.printStackTrace();
                                 }
                             }
-                            if (i == 8) {
-                                temp3.setText(Double.toString(modelClass.list.get(i).main.temp));
+                            if (i == 16) {
+                                temp3.setText(Double.toString((int)modelClass.list.get(i).main.temp-273)+" \u2103");
                                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                 try {
                                     Date date = format.parse(modelClass.list.get(i).dt_txt);
@@ -155,8 +154,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                                     e.printStackTrace();
                                 }
                             }
-                            if (i == 12) {
-                                temp4.setText(Double.toString(modelClass.list.get(i).main.temp));
+                            if (i == 24) {
+                                temp4.setText(Double.toString((int)modelClass.list.get(i).main.temp-273)+" \u2103");
                                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                 try {
                                     Date date = format.parse(modelClass.list.get(i).dt_txt);
@@ -165,8 +164,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                                     e.printStackTrace();
                                 }
                             }
-                            if (i == 19) {
-                                temp5.setText(Double.toString(modelClass.list.get(i).main.temp));
+                            if (i == 32) {
+                                temp5.setText(Double.toString((int)modelClass.list.get(i).main.temp-273)+" \u2103");
                                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                 try {
                                     Date date = format.parse(modelClass.list.get(i).dt_txt);
