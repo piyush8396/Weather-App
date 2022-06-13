@@ -8,17 +8,24 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder>{
     ArrayList<myList> listdata;
+     OnAdapterItemClickListener listener;
 
     // RecyclerView recyclerView;
-    public MyListAdapter(ArrayList<myList> listdata) {
+    public MyListAdapter(ArrayList<myList> listdata,OnAdapterItemClickListener listener) {
+
         this.listdata = listdata;
+        this.listener=listener;
     }
+
+
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
@@ -32,12 +39,13 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
         final myList myListData = listdata.get(position);
         holder.textView1.setText(listdata.get(position).getDay());
         holder.textView.setText(listdata.get(position).getTemp());
-        holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(view.getContext(),"click on item: "+myListData.getTemp(),Toast.LENGTH_LONG).show();
-            }
-        });
+//        holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//              //  Toast.makeText(view.getContext(),"click on item: "+myListData.getTemp(),Toast.LENGTH_LONG).show();
+//
+//            }
+//        });
     }
 
 
@@ -46,7 +54,7 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
         return listdata.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView textView1;
         public TextView textView;
         public RelativeLayout relativeLayout;
@@ -55,6 +63,15 @@ public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder
             this.textView1 = (TextView) itemView.findViewById(R.id.day);
             this.textView = (TextView) itemView.findViewById(R.id.temp);
             relativeLayout = (RelativeLayout)itemView.findViewById(R.id.relative);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                  listener.onAdapterItemClickListener(getAdapterPosition());
+                }
+            }
+            );
         }
     }
+
 }

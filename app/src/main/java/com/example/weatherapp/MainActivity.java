@@ -26,6 +26,7 @@ import android.text.ParcelableSpan;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -53,23 +54,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements LocationListener {
+public class MainActivity extends AppCompatActivity implements LocationListener,OnAdapterItemClickListener {
     String APPId = "1aa1c77170fcdb824e74e94c02bd799b";
-    int c=40;
+    int c=5;
 
     //  static FusedLocationProviderClient fusedLocationProvideClient;
     TextView temp;
     TextView city;
-    TextView day1;
-    TextView temp1;
-    TextView day2;
-    TextView temp2;
-    TextView day3;
-    TextView temp3;
-    TextView day4;
-    TextView temp4;
-    TextView day5;
-    TextView temp5;
+
  final ArrayList<myList>lists = new ArrayList<myList>();
 
     protected LocationManager locationManager;
@@ -200,9 +192,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 }
             });
         }
-        Log.d("s",lists.size()+"");
+       // Log.d("s",lists.size()+"");
         RecyclerView recyclerView=(RecyclerView) findViewById(R.id.recyclerView);
-        MyListAdapter adapter=new MyListAdapter(lists);
+        MyListAdapter adapter=new MyListAdapter(lists,this);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
@@ -231,6 +223,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
 
-
-
+    @Override
+    public void onAdapterItemClickListener(int position) {
+        myList m=lists.get(position);
+        String day=m.getDay();
+        String temp=m.getTemp();
+        Toast.makeText(this,day+" temp is "+temp,Toast.LENGTH_LONG).show();
+    }
 }
